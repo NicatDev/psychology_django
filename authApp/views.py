@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Contact, ContactInfo, About
-from .serializers import ContactSerializer, ContactInfoSerializer, AboutSerializer, UserProfileSerializer
+from .models import Contact, ContactInfo, About, Plan
+from .serializers import PlanListSerializer ,ContactSerializer, ContactInfoSerializer, AboutSerializer, UserProfileSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -48,3 +48,7 @@ class UserProfileView(APIView):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+    
+class PlanListView(generics.ListAPIView):
+    queryset = Plan.objects.filter(is_active=True).order_by('price')
+    serializer_class = PlanListSerializer

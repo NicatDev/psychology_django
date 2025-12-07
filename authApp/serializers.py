@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Contact, ContactInfo, About
+from .models import Contact, ContactInfo, About, Plan
 
 class AboutSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,3 +62,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'phone_number', 'tests']
+
+
+class PlanListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plan
+        fields = "__all__"

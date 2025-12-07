@@ -39,3 +39,17 @@ class ContactInfo(models.Model):
         return self.location or "No Location"
     
 
+class Plan(models.Model):
+    title = models.CharField(max_length=100)               # "Standard", "Medium", "Pro"
+    tests_count = models.PositiveIntegerField(default=1)   # neçə test daxil olduğu
+    price = models.DecimalField(max_digits=10, decimal_places=2)  
+    customerPrice = models.DecimalField(max_digits=10, decimal_places=2)  
+    currency = models.CharField(max_length=10, default='$')
+    short_description = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'price']
+
+    def __str__(self):
+        return f"{self.title} ({self.price} {self.currency})"
