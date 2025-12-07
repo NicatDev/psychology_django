@@ -20,11 +20,17 @@ class AnswerSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ['id', 'option']
 
+
+
 class TestSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(many=True, read_only=True)
+    answers = serializers.SerializerMethodField()
+
     class Meta:
         model = Test
         fields = ['id', 'created_at', 'answers']
+
+    def get_answers(self, obj):
+        return [answer.option.id for answer in obj.answers.all()]
 
 class TestCreateAnswerSerializer(serializers.Serializer):
     option_id = serializers.IntegerField()
