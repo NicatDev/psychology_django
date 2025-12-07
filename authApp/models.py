@@ -3,7 +3,8 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
-
+    active_test_count = models.PositiveSmallIntegerField(default=0)
+    
     def __str__(self):
         return self.username
     
