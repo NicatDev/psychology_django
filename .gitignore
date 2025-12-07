@@ -1,0 +1,37 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3   # db faylı ignore olunur
+*.sqlite    # əgər istifadə edilirsə
+*.pyc
+
+# Migrations (ignore except __init__.py)
+*/migrations/*
+!*/migrations/__init__.py
+
+# Django static and media
+staticfiles/
+media/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Mac/Linux
+.DS_Store
+*.swp
