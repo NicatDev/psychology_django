@@ -4,7 +4,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     active_test_count = models.PositiveSmallIntegerField(default=0)
-    
+
     def __str__(self):
         return self.username
     
@@ -50,7 +50,7 @@ class Plan(models.Model):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ['order', 'price']
+        ordering = ['price']
 
     def __str__(self):
         return f"{self.title} ({self.price} {self.currency})"
