@@ -61,7 +61,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     tests = SimpleTestSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'phone_number', 'tests']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'phone_number', 'tests','active_test_count']
 
 
 class PlanListSerializer(serializers.ModelSerializer):
