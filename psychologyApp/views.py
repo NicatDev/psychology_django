@@ -52,3 +52,18 @@ class TestDetailView(generics.RetrieveAPIView):
     serializer_class = TestSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Test.objects.all()
+
+
+from .models import PersonalityType
+from .serializers import PersonalityTypeDetailSerializer
+
+# List API (sadəcə id və name də ola bilər)
+class PersonalityTypeListView(generics.ListAPIView):
+    queryset = PersonalityType.objects.all()
+    serializer_class = PersonalityTypeDetailSerializer  # nested info ilə
+
+# Detail API (lookup by code)
+class PersonalityTypeDetailView(generics.RetrieveAPIView):
+    queryset = PersonalityType.objects.all()
+    serializer_class = PersonalityTypeDetailSerializer
+    lookup_field = 'code'
