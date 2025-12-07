@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'psychologyApp',
     'authApp',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
