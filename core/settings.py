@@ -28,11 +28,13 @@ ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
-]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "http://37.27.202.254:325",  # server IP əlavə edildi
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://37.27.202.254:325",  # server IP əlavə edildi
+]
 # Application definition
 
 INSTALLED_APPS = [
