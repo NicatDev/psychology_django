@@ -4,6 +4,8 @@ from django.conf import settings
 class Test(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tests')
     created_at = models.DateTimeField(auto_now=True)
+    result_values = models.JSONField(null=True,blank=True)
+    result = models.TextField(null=True,blank=True)
 
 class Question(models.Model):
     text = models.TextField()

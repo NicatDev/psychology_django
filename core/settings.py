@@ -27,8 +27,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://37.27.202.254:311',
-    'http://127.0.0.1:8000',  # test üçün
+    "http://localhost:5173",
+]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
 ]
 
 # Application definition
@@ -46,9 +48,11 @@ INSTALLED_APPS = [
     'psychologyApp',
     'authApp',
     'drf_yasg',
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware", 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,6 +136,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),  # Tokenin ömrü 10 saniyə
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Refresh token ömrü (istəyə görə dəyiş)
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

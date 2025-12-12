@@ -1,5 +1,61 @@
 from rest_framework import serializers
-from .models import Contact, ContactInfo, About, Plan
+from .models import Contact, ContactInfo, About, Plan, Tag, Blog
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from django.contrib.auth import get_user_model
+from psychologyApp.models import Test, Answer, Option 
+User = get_user_model()
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # İstəyə görə əlavə məlumat əlavə edə bilərsən
+        token['email'] = user.email
+        return token
+
+    def validate(self, attrs):
+        # email ilə login
+        credentials = {
+            'email': attrs.get('email'),
+            'password': attrs.get('password')
+        }
+        return super().validate(credentials)
+    
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone_number']
+
+    def update(self, instance, validated_data):
+        # Hər sahəni yoxla, boşdursa pass et
+        for field in ['first_name', 'last_name', 'email', 'phone_number']:
+            value = validated_data.get(field, None)
+            if value is not None and str(value).strip() != '':
+                setattr(instance, field, value)
+        instance.save()
+        return instance
+
+class UserUpdatePPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['image']
+
+        
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Old password is incorrect")
+        return value
+
+    def validate_new_password(self, value):
+        if len(value) < 6:
+            raise serializers.ValidationError("New password must be at least 6 characters")
+        return value
 
 class AboutSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,11 +82,9 @@ class ContactInfoSerializer(serializers.ModelSerializer):
 
 
 
+ # Test modeli testsApp-da olduğunu fərz edirəm
 
-from django.contrib.auth import get_user_model
-from psychologyApp.models import Test, Answer, Option  # Test modeli testsApp-da olduğunu fərz edirəm
 
-User = get_user_model()
 
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,16 +109,35 @@ class TestSerializer(serializers.ModelSerializer):
 class SimpleTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Test
-        fields = ['id', 'created_at']
+        fields = ['id', 'created_at','result_values','result']
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
     tests = SimpleTestSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'phone_number', 'tests','active_test_count']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'phone_number', 'tests','active_test_count','image']
 
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            return request.build_absolute_uri(obj.image.url)  # tam URL yaradılır
+        return None
 
 class PlanListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
         fields = "__all__"
+
+class TagListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['name']
+
+class BlogListSerializer(serializers.ModelSerializer):
+    tags = TagListSerializer(many=True) 
+    class Meta:
+        model = Blog
+        fields = "__all__"
+
+

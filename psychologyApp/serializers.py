@@ -27,7 +27,7 @@ class TestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Test
-        fields = ['id', 'created_at', 'answers']
+        fields = ['id', 'created_at', 'answers', 'result', 'result_values']
 
     def get_answers(self, obj):
         return [answer.option.id for answer in obj.answers.all()]
@@ -39,12 +39,21 @@ class TestCreateSerializer(serializers.Serializer):
     answers = serializers.ListField(
         child=serializers.IntegerField(),  # Option id-ləri
         allow_empty=False,
-        
     )
+    result = serializers.CharField(required=False, allow_blank=True)  # TextField üçün
+    result_values = serializers.JSONField(required=False) 
+ # JSONField üçün
 
     def create(self, validated_data):
         user = self.context['request'].user
-        test = Test.objects.create(user=user)
+        print(validated_data)
+        result = validated_data.get('result', "")
+        result_values = validated_data.get('result_values', {})
+        test = Test.objects.create(
+            user=user,
+            result=result,
+            result_values=result_values
+        )
         for option_id in validated_data['answers']:
             option = Option.objects.get(id=option_id)
             Answer.objects.create(test=test, option=option)
@@ -108,3 +117,17 @@ class PersonalityTypeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonalityType
         fields = '__all__'
+
+
+
+class OptionSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Option
+        fields = ['id', 'text', 'value']
+
+class QuestionSaveSerializer(serializers.ModelSerializer):
+    options = OptionSaveSerializer(many=True)
+
+    class Meta:
+        model = Question
+        fields = ['id', 'text', 'dimension', 'type', 'options']

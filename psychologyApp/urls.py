@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import QuestionListView, TestCreateView, UserTestListView, TestDetailView,PersonalityTypeListView,PersonalityTypeDetailView
+from .views import LoadPersonalityTypesAPIView,LoadQuestionsAPIView, QuestionListView, TestCreateView, UserTestListView, TestDetailView,PersonalityTypeListView,PersonalityTypeDetailView
 
 urlpatterns = [
     path('questions/', QuestionListView.as_view(), name='questions-list'),
@@ -9,4 +9,8 @@ urlpatterns = [
 
        path('personality-types/', PersonalityTypeListView.as_view(), name='personality-type-list'),
     path('personality-types/<str:code>/', PersonalityTypeDetailView.as_view(), name='personality-type-detail'),
+
+
+    path('load-questions/', LoadQuestionsAPIView.as_view(), name='load-questions'),
+    path('load-personalityTypes/', LoadPersonalityTypesAPIView.as_view(), name='load-questions'),
 ]

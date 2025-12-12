@@ -2,11 +2,16 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class CustomUser(AbstractUser):
+    username = models.CharField(max_length=150, blank=True, null=True)
+    email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     active_test_count = models.PositiveSmallIntegerField(default=0)
+    image = models.ImageField(null=True,blank=True)
+    USERNAME_FIELD = 'email' 
+    REQUIRED_FIELDS = []       
 
     def __str__(self):
-        return self.username
+        return self.email
     
 
 class About(models.Model):
@@ -54,3 +59,21 @@ class Plan(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.price} {self.currency})"
+    
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class Blog(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=200)
+    content = models.TextField()
+    tags = models.ManyToManyField(Tag, related_name="blogs")
+    created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(null=True,blank=True)
+    def __str__(self):
+        return self.title
