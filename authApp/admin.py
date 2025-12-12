@@ -1,7 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, About, Contact, ContactInfo, Plan, Tag, Blog
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
+class CustomAdminLoginForm(AuthenticationForm):
+    username = forms.EmailField(label="Email")
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'is_staff', 'last_login', 'date_joined')
@@ -9,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
         (None, {'fields': ('phone_number','active_test_count')}),
     )
     readonly_fields = ('last_login', 'date_joined')
-
+    login_form = CustomAdminLoginForm
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Contact)
 admin.site.register(ContactInfo)
