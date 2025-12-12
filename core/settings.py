@@ -141,8 +141,8 @@ USE_TZ = True
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),  # Tokenin ömrü 10 saniyə
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Refresh token ömrü (istəyə görə dəyiş)
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Tokenin ömrü 10 saniyə
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token ömrü (istəyə görə dəyiş)
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
