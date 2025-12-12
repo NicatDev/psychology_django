@@ -156,11 +156,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # collectstatic buraya yığacaq
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # layihənin içindəki static qovluq
-]
+STATIC_URL = 'static/'
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files (uploaded by users)
 MEDIA_URL = '/media/'
