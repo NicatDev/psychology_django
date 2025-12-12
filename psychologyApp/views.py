@@ -13,14 +13,14 @@ from django.conf import settings
 import os
 # 1) Questions GET
 class QuestionListView(generics.ListAPIView):
-    queryset = Question.objects.prefetch_related('options').all()[0:10]
+    queryset = Question.objects.prefetch_related('options').all()
     serializer_class = QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 # 2) Test Create
 class TestCreateView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request):
         serializer = TestCreateSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
