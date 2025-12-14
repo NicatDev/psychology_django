@@ -24,7 +24,13 @@ class TestCreateView(APIView):
     def post(self, request):
         serializer = TestCreateSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
+        user = request.user
+        if user.active_test_count > 0:
+            user.active_test_count -= 1
+        else:
+            return Response({'message': 'İstifadəçinin hesabında test cəhdi sayı 0-dır'}, status=status.HTTP_201_CREATED)
         test = serializer.save()
+        
         return Response({'test_id': test.id}, status=status.HTTP_201_CREATED)
     
     def get(self, request):
