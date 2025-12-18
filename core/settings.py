@@ -30,12 +30,14 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://37.27.202.254:325",  # server IP əlavə edildi
+    'https://psychology.octopus.com.az'
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://37.27.202.254:325",  # server IP əlavə edildi
+    'https://psychology.octopus.com.az'
 ]
 # Application definition
 
