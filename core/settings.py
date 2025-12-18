@@ -26,21 +26,14 @@ SECRET_KEY = 'django-insecure-+1j-)k8ty37^qmg2l-c8btu$kui3pmpg76w&#v-8-jdl-z&3e_
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://37.27.202.254:325",  # server IP əlavə edildi
-    'https://psychology.octopus.com.az'
-]
+# CSRF üçün hər kəsə icazə (daha riskli)
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://37.27.202.254:325",  # server IP əlavə edildi
-    'https://psychology.octopus.com.az'
-]
-# Application definition
+# CORS üçün hər kəsə icazə
+CORS_ALLOW_ALL_ORIGINS = True
 
+# Cookie-lərin frontend ilə işləməsi üçün
+CORS_ALLOW_CREDENTIALS = True
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
