@@ -28,13 +28,13 @@ def token_provider():
     return token_obj
 
 
-def gen_idempotency_key(peaces: tuple[str], prefix: str | None = None):
+def gen_idempotency_key(pieces: tuple[str], prefix: str | None = None):
     key = "idempotent:"
 
     if prefix:
         key += prefix + ":"
 
-    key += ":".join(map(str, peaces))
+    key += ":".join(map(str, pieces))
     key += ":" + settings.SECRET_KEY
 
     return hashlib.sha256(key.encode('utf-8')).hexdigest()
