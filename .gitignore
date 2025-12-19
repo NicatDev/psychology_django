@@ -35,3 +35,6 @@ media/
 # Mac/Linux
 .DS_Store
 *.swp
+
+# Environment variables
+.env
