@@ -12,6 +12,7 @@ env = environ.Env(
     PAYPAL_SANDBOX_CLIENT_ID=(str, ""),
     PAYPAL_LIVE_CLIENT_ID=(str, ""),
     PAYPAL_SANDBOX_CLIENT_SECRET=(str, ""),
+    PAYPAL_LIVE_CLIENT_SECRET=(str, ""),
     PAYPAL_LIVE_CANCEL_URL=(str, ""),
     PAYPAL_WEBHOOK_ID=(str, ""),
     PAYPAL_CLIENT_PROXY_ENABLED=(bool, False),
