@@ -14,7 +14,6 @@ env = environ.Env(
     PAYPAL_SANDBOX_CLIENT_SECRET=(str, ""),
     PAYPAL_LIVE_CANCEL_URL=(str, ""),
     PAYPAL_WEBHOOK_ID=(str, ""),
-    PAYPAL_ACCESS_TOKEN_CACHE_TTL=(int, 28800),
     PAYPAL_CLIENT_PROXY_ENABLED=(bool, False),
     PAYPAL_RETURN_URL=(str, ""),
     PAYPAL_CANCEL_URL=(str, ""),
@@ -23,7 +22,6 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
 PAYPAL_MODE = env("PAYPAL_MODE", default="sandbox")
-PAYPAL_ACCESS_TOKEN_CACHE_TTL = env("PAYPAL_ACCESS_TOKEN_CACHE_TTL", default=28800)
 PAYPAL_WEBHOOK_ID = env("PAYPAL_WEBHOOK_ID")
 PAYPAL_RETURN_URL = env("PAYPAL_RETURN_URL", default="http://localhost:8000/payment/success")
 PAYPAL_CANCEL_URL = env("PAYPAL_CANCEL_URL", default="http://localhost:8000/payment/cancel")
