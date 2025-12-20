@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authApp.urls')),  # authApp urlslərini çağır
     path('test/', include('psychologyApp.urls')),  # authApp urlslərini çağır
+    path('pay/', include('payments.urls')),  # authApp urlslərini çağır
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

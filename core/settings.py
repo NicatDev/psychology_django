@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'psychologyApp',
     'authApp',
     'drf_yasg',
-    "corsheaders"
+    "corsheaders",
+    "payments"
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,38 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from decouple import config
+
+PAYPAL_MODE = config("PAYPAL_MODE", default="sandbox")
+
+PAYPAL_SANDBOX_CLIENT_ID = config("PAYPAL_SANDBOX_CLIENT_ID")
+PAYPAL_SANDBOX_CLIENT_SECRET = config("PAYPAL_SANDBOX_CLIENT_SECRET")
+
+PAYPAL_LIVE_CLIENT_ID = config("PAYPAL_LIVE_CLIENT_ID", default=None)
+PAYPAL_LIVE_CLIENT_SECRET = config("PAYPAL_LIVE_CLIENT_SECRET", default=None)
+
+PAYPAL_WEBHOOK_ID = config("PAYPAL_WEBHOOK_ID", default=None)
+
+PAYPAL_CLIENT_PROXY_ENABLED = config("PAYPAL_CLIENT_PROXY_ENABLED", default=False, cast=bool)
+
+PAYPAL_RETURN_URL = config(
+    "PAYPAL_RETURN_URL",
+    default="http://localhost:2000/paypal/success"
+)
+
+
+PAYPAL_CANCEL_URL = config(
+    "PAYPAL_CANCEL_URL",
+    default="http://localhost:2000/paypal/cancel"
+)
+
+# Active credentials (mode-a görə)
+if PAYPAL_MODE == "sandbox":
+    PAYPAL_CLIENT_ID = PAYPAL_SANDBOX_CLIENT_ID
+    PAYPAL_CLIENT_SECRET = PAYPAL_SANDBOX_CLIENT_SECRET
+    PAYPAL_API_BASE_URL = "https://api-m.sandbox.paypal.com"
+else:
+    PAYPAL_CLIENT_ID = PAYPAL_LIVE_CLIENT_ID
+    PAYPAL_CLIENT_SECRET = PAYPAL_LIVE_CLIENT_SECRET
+    PAYPAL_API_BASE_URL = "https://api-m.paypal.com"

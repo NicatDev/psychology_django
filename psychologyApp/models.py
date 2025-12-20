@@ -9,7 +9,7 @@ class Test(models.Model):
 
 class Question(models.Model):
     text = models.TextField()
-    dimension = models.CharField(max_length=10)  # EI, TF, JP, SN
+    dimension = models.CharField(max_length=10) 
     type = models.CharField(max_length=50, default='likert')  
 
     def __str__(self):
@@ -33,9 +33,6 @@ class Answer(models.Model):
         return f"{self.option.question.text}"
     
 
-
-
-
 class PersonalityType(models.Model):
     code = models.CharField(max_length=10, unique=True)  # INTJ, INTP
     name = models.CharField(max_length=100)
@@ -53,7 +50,6 @@ class PersonalityType(models.Model):
     def __str__(self):
         return self.code
 
-# ManyToMany tables üçün nümunə (list-lər)
 class KeyMotivator(models.Model):
     personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="key_motivators")
     name = models.CharField(max_length=255)
@@ -86,4 +82,3 @@ class TeamActionStep(models.Model):
     personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="team_action_steps")
     name = models.CharField(max_length=255)
 
-# Eyni prinsip digər list tipli field-lər üçün də tətbiq olunur.
