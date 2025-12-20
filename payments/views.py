@@ -40,7 +40,7 @@ class BuyPlanAPIView(APIView):
 
 from django.shortcuts import redirect
 from payments.services.paypal import capture_order
-
+from rest_framework import status
 
 class PaypalSuccessView(APIView):
     permission_classes = [IsAuthenticated]
@@ -73,9 +73,14 @@ class PaypalSuccessView(APIView):
             user = payment.user
             user.active_test_count += payment.plan.tests_count
             user.save()
-
-        return redirect("/payment-success")
-    
+            return Response(
+                {"order_id": order_id, "detail": "Payment completed successfully!"},
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {"order_id": order_id, "detail": "Payment failed."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 class MyPaymentsView(APIView):
     permission_classes = [IsAuthenticated]
