@@ -52,6 +52,19 @@ class PaypalSuccessView(APIView):
             paypal_order_id=order_id,
             status="CREATED"
         )
+        if payment.status == "COMPLETED":
+            # Artıq ödəniş tamamlanıb, ikinci dəfə capture etməyə ehtiyac yoxdur
+            return Response(
+                {"detail": "Payment has already been processed."},
+                status=200
+            )
+
+        if payment.status != "CREATED":
+            # Əgər status CREATED deyilsə, başqa bir problem ola bilər
+            return Response(
+                {"detail": "Payment cannot be processed."},
+                status=400
+            )
         capture = capture_order(order_id)
         if capture["status"] == "COMPLETED":
             payment.status = "COMPLETED"
