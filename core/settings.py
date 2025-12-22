@@ -57,7 +57,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "Psychology admin",
     "site_brand": "Psychology admin",
     "login_logo": "images/logo.jpg",
-    "site_logo": "images/logo.jpg",
+    "site_logo": "images/logo.png",
     
     "show_ui_builder": True,
 }
