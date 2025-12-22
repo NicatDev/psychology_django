@@ -53,9 +53,9 @@ INSTALLED_APPS = [
 ]
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Octopus psychology admin",
-    "site_header": "Octopus psychology admin",
-    "site_brand": "Octopus psychology admin",
+    "site_title": "Psychology admin",
+    "site_header": "Psychology admin",
+    "site_brand": "Psychology admin",
     "login_logo": "images/logo.jpg",
     "site_logo": "images/logo.jpg",
     
