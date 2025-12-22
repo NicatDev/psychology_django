@@ -35,6 +35,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Cookie-lərin frontend ilə işləməsi üçün
 CORS_ALLOW_CREDENTIALS = True
 INSTALLED_APPS = [
+    'jazzmin'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +51,14 @@ INSTALLED_APPS = [
     "corsheaders",
     "payments"
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Octopus psychology admin",
+    "site_header": "Octopus psychology admin",
+    "site_brand": "Octopus psychology admin",
+    "login_logo": "images/logo.png",
+    "show_ui_builder": True,
+}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware", 
