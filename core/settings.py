@@ -57,6 +57,8 @@ JAZZMIN_SETTINGS = {
     "site_header": "Octopus psychology admin",
     "site_brand": "Octopus psychology admin",
     "login_logo": "images/logo.jpg",
+    "site_logo": "images/logo.jpg",
+    
     "show_ui_builder": True,
 }
 
