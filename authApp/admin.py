@@ -8,6 +8,22 @@ class CustomUserAdmin(UserAdmin):
     # fieldsets = UserAdmin.fieldsets + (
     #     (None, {'fields': ('phone_number','active_test_count')}),
     # )
+    fieldsets = (
+        ("General", {
+            "fields": ("username", "password")
+        }),
+        ("Personal info", {
+            "fields": ("first_name", "last_name", "email", "phone_number")
+        }),
+        ("Tests info", {
+            "fields": ("active_test_count",)
+        }),
+        ("Permissions", {
+            "fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")
+        }),
+        ("Important dates", {
+            "fields": ("last_login", "date_joined")
+        }),)
     readonly_fields = ('last_login', 'date_joined')
 
 admin.site.register(CustomUser, CustomUserAdmin)
