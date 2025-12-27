@@ -39,10 +39,18 @@ class CustomUser(AbstractUser):
         return self.email
     
     def save(self, *args, **kwargs):
-        # Əgər username boşdursa və ya None-dırsa, email-i ona mənimsət
-        if not self.username:
+        # 1. Əgər email var, amma username boşdursa
+        if self.email and not self.username:
             self.username = self.email
         
+        # 2. Əgər username var, amma email boşdursa (çox nadir hal)
+        if self.username and not self.email:
+            self.email = self.username
+
+        # 3. Şifrə hash-lənməyibsə hash-lə (Admin-dən yaradanda login problemi olmaması üçün)
+        if self.password and not self.password.startswith(('pbkdf2_sha256$', 'bcrypt$', 'argon2$')):
+            self.set_password(self.password)
+
         super().save(*args, **kwargs)
     
 
