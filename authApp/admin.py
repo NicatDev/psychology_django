@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password', 'password_confirm'), # Yalnız email və şifrə
+            'fields': ('email', 'password'), # Yalnız email və şifrə
         }),
     )
     fieldsets = (
