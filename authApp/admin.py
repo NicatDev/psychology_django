@@ -8,6 +8,7 @@ class CustomUserAdmin(UserAdmin):
     # fieldsets = UserAdmin.fieldsets + (
     #     (None, {'fields': ('phone_number','active_test_count')}),
     # )
+    add_form_template = None
     def get_fieldsets(self, request, obj=None):
         if not obj: # Əgər yeni user yaradılırsa
             return (
