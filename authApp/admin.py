@@ -8,6 +8,12 @@ class CustomUserAdmin(UserAdmin):
     # fieldsets = UserAdmin.fieldsets + (
     #     (None, {'fields': ('phone_number','active_test_count')}),
     # )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password', 'password_confirm'), # Yalnız email və şifrə
+        }),
+    )
     fieldsets = (
         ("General", {
             "fields": ("username", "password")
