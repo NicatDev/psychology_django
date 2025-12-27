@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -8,6 +7,10 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError("The Email must be set")
         email = self.normalize_email(email)
+        
+        # Əgər extra_fields daxilində username yoxdursa, email-i mənimsət
+        extra_fields.setdefault('username', email)
+        
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -26,23 +29,25 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
+    # blank=True edirik ki, formlarda mütləq doldurulması tələb olunmasın
     username = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     active_test_count = models.PositiveSmallIntegerField(default=0)
-    image = models.ImageField(null=True,blank=True)
+    image = models.ImageField(null=True, blank=True)
+    
     USERNAME_FIELD = 'email' 
-    REQUIRED_FIELDS = []       
+    REQUIRED_FIELDS = [] # Username artıq tələb olunan sahə deyil
 
     objects = CustomUserManager()
+
     def __str__(self):
         return self.email
     
     def save(self, *args, **kwargs):
-        # Əgər username boşdursa və ya None-dırsa, email-i ona mənimsət
-        if not self.username:
+        # Bazaya yazılmamışdan dərhal əvvəl username-i email-ə bərabər edirik
+        if self.email:
             self.username = self.email
-        
         super().save(*args, **kwargs)
     
 
