@@ -52,7 +52,7 @@ class UserTestListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Test.objects.filter(user=self.request.user).order_by('-created_at')
+        return Test.objects.filter(user=self.request.user).order_by('-created_at')[0:10]
     
 
 # 4) Test detail with answers
