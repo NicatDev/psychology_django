@@ -8,19 +8,6 @@ class CustomUserAdmin(UserAdmin):
     # fieldsets = UserAdmin.fieldsets + (
     #     (None, {'fields': ('phone_number','active_test_count')}),
     # )
-    add_form_template = None
-    def get_fieldsets(self, request, obj=None):
-        if not obj: # Əgər yeni user yaradılırsa
-            return (
-                (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'active_test_count')}),
-            )
-        return super().get_fieldsets(request, obj)
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password'), # Yalnız email və şifrə
-        }),
-    )
     fieldsets = (
         ("General", {
             "fields": ("username", "password")
@@ -37,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
         ("Important dates", {
             "fields": ("last_login", "date_joined")
         }),)
-    readonly_fields = ('last_login', 'date_joined','username')
+    readonly_fields = ('last_login', 'date_joined')
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Contact)
