@@ -6,26 +6,37 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
-
-class CustomUserCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+class CustomUserCreationForm(forms.ModelForm):
+    class Meta:
         model = CustomUser
-        fields = ('email',) # Formda yalnız email görünsün
+        fields = ('email', 'password')
+        widgets = {
+            'password': forms.PasswordInput(), # Şifrə nöqtə-nöqtə görünsün
+        }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if 'username' in self.fields:
-            self.fields['username'].label = "Email (Username)" # Adını dəyişirik
-            self.fields['username'].help_text = "Sistemə giriş üçün email ünvanınızı daxil edin."
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"]) # Şifrəni təhlükəsiz kodlaşdırır
+        if commit:
+            user.save()
+        return user
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm # Yeni user yaradanda bu form işləsin
-    
+    add_form = CustomUserCreationForm # Yeni user əlavə edəndə bu sadə form çıxsın
     model = CustomUser
-    list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'active_test_count')
     
-    # Redaktə səhifəsi (Change view)
+    list_display = ('email', 'username', 'is_staff', 'active_test_count')
+    
+    # Yeni istifadəçi əlavə etmə səhifəsində görünəcək sahələr
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password'),
+        }),
+    )
+
+    # Mövcud istifadəçini redaktə etmə səhifəsi
     fieldsets = (
         ("General", {"fields": ("username", "password")}),
         ("Personal info", {"fields": ("first_name", "last_name", "email", "phone_number")}),
@@ -33,8 +44,9 @@ class CustomUserAdmin(UserAdmin):
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
     )
-    
-    readonly_fields = ('last_login', 'date_joined')
+
+    readonly_fields = ('last_login', 'date_joined', 'username')
+    ordering = ('email',)
 
 admin.site.register(Contact)
 admin.site.register(ContactInfo)
