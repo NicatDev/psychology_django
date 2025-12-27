@@ -13,7 +13,7 @@ from django.conf import settings
 import os
 # 1) Questions GET
 class QuestionListView(generics.ListAPIView):
-    queryset = Question.objects.prefetch_related('options').all()
+    queryset = Question.objects.prefetch_related('options').all()[0:4]
     serializer_class = QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -52,7 +52,7 @@ class UserTestListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Test.objects.filter(user=self.request.user).order_by('-created_at')[0:10]
+        return Test.objects.filter(user=self.request.user).order_by('-created_at')
     
 
 # 4) Test detail with answers
