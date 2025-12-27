@@ -38,6 +38,13 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
     
+    def save(self, *args, **kwargs):
+        # Əgər username boşdursa və ya None-dırsa, email-i ona mənimsət
+        if not self.username:
+            self.username = self.email
+        
+        super().save(*args, **kwargs)
+    
 
 class About(models.Model):
     title = models.CharField(max_length=200, null=True, blank=True)     
