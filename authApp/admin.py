@@ -36,7 +36,6 @@ class CustomUserAdmin(UserAdmin):
     
     readonly_fields = ('last_login', 'date_joined')
 
-admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Contact)
 admin.site.register(ContactInfo)
 admin.site.register(About)
