@@ -30,7 +30,7 @@ class CustomUserAdmin(UserAdmin):
         ("Important dates", {
             "fields": ("last_login", "date_joined")
         }),)
-    readonly_fields = ('last_login', 'date_joined')
+    readonly_fields = ('last_login', 'date_joined','username')
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Contact)
