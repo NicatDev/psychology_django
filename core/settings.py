@@ -74,10 +74,10 @@ JAZZMIN_SETTINGS = {
         "psychologyApp.PersonalityType": "fas fa-user",
         "payments.Payment": "fas fa-credit-card"
     },
- "hide_models": [
+   "hide_apps": ["auth", "admin", "sessions", "authtoken"],  # lazımsız apps
+    "hide_models": [
         "auth.Token",  # Token modelini gizlətmək üçün
-        # Lazım gələrsə digər modelləri də əlavə et
-        'auth.Groups'
+        # Digər modelləri də əlavə edə bilərsən
     ],
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
