@@ -60,21 +60,24 @@ JAZZMIN_SETTINGS = {
     "site_logo": "images/logoS.png",
     
     "show_ui_builder": True,
-       "icons": {
+  "icons": {
+        "app.CustomUser": "fas fa-user",
+        "app.Contact": "fas fa-address-book",
+        "app.ContactInfo": "fas fa-info-circle",
+        "app.About": "fas fa-file-alt",
+        "app.Plan": "fas fa-clipboard-list",
+        "app.Tag": "fas fa-tag",
+        "app.Blog": "fas fa-blog",
         "app.Question": "fas fa-question-circle",
-        "app.Option": "fas fa-list-ul",
         "app.Test": "fas fa-vial",
         "app.Answer": "fas fa-check-square",
         "app.PersonalityType": "fas fa-user",
-        "app.KeyMotivator": "fas fa-bolt",
-        "app.IdealWorkEnvironment": "fas fa-archway",
-        "app.CoreValue": "fas fa-gem",
-        "app.PreferredWorkTask": "fas fa-tasks",
-        "app.ContributionToOrganization": "fas fa-handshake",
-        "app.TeamHelp": "fas fa-hands-helping",
-        "app.TeamIrritate": "fas fa-exclamation-triangle",
-        "app.TeamActionStep": "fas fa-forward",
     },
+
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "show_sidebar": True,
+    "navigation_expanded": True,
 }
 
 MIDDLEWARE = [
