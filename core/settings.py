@@ -60,6 +60,21 @@ JAZZMIN_SETTINGS = {
     "site_logo": "images/logoS.png",
     
     "show_ui_builder": True,
+       "icons": {
+        "app.Question": "fas fa-question-circle",
+        "app.Option": "fas fa-list-ul",
+        "app.Test": "fas fa-vial",
+        "app.Answer": "fas fa-check-square",
+        "app.PersonalityType": "fas fa-user",
+        "app.KeyMotivator": "fas fa-bolt",
+        "app.IdealWorkEnvironment": "fas fa-archway",
+        "app.CoreValue": "fas fa-gem",
+        "app.PreferredWorkTask": "fas fa-tasks",
+        "app.ContributionToOrganization": "fas fa-handshake",
+        "app.TeamHelp": "fas fa-hands-helping",
+        "app.TeamIrritate": "fas fa-exclamation-triangle",
+        "app.TeamActionStep": "fas fa-forward",
+    },
 }
 
 MIDDLEWARE = [
