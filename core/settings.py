@@ -72,8 +72,13 @@ JAZZMIN_SETTINGS = {
         "psychologyApp.Test": "fas fa-vial",
         "psychologyApp.Answer": "fas fa-check-square",
         "psychologyApp.PersonalityType": "fas fa-user",
+        "payments.Payment": "fas fa-credit-card"
     },
-
+ "hide_models": [
+        "auth.Token",  # Token modelini gizlətmək üçün
+        # Lazım gələrsə digər modelləri də əlavə et
+        'auth.Groups'
+    ],
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
     "show_sidebar": True,
