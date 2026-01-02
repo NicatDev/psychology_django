@@ -13,7 +13,7 @@ from django.conf import settings
 import os
 # 1) Questions GET
 class QuestionListView(generics.ListAPIView):
-    queryset = Question.objects.prefetch_related('options').all()
+    queryset = Question.objects.prefetch_related('options').all()[0:20]
     serializer_class = QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
