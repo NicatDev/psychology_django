@@ -113,6 +113,7 @@ from .serializers import RegisterSerializer, VerifyEmailSerializer
 from .models import VerificationCode
 
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -144,6 +145,7 @@ class RegisterView(APIView):
 
 
 class VerifyEmailView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = VerifyEmailSerializer(data=request.data)
         if serializer.is_valid():
