@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework_simplejwt.views import  TokenRefreshView
-from .views import UserPPUpdateAPIView,UserUpdateAPIView,ChangePasswordAPIView,CustomTokenObtainPairView, ContactCreateAPIView, ContactInfoAPIView, AboutAPIView, UserProfileView, PlanListView
+from .views import VerifyEmailView,RegisterView,UserPPUpdateAPIView,UserUpdateAPIView,ChangePasswordAPIView,CustomTokenObtainPairView, ContactCreateAPIView, ContactInfoAPIView, AboutAPIView, UserProfileView, PlanListView
 from rest_framework.routers import DefaultRouter
 from .views import BlogViewSet
 router = DefaultRouter()
@@ -19,5 +19,8 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     path('plans/', PlanListView.as_view(), name='plan-list'),
        path('', include(router.urls)),
+
+       path('register/', RegisterView.as_view(), name='register'),
+    path('verify-email/', VerifyEmailView.as_view(), name='verify-email'),
 ]
 

@@ -52,7 +52,20 @@ class CustomUser(AbstractUser):
             self.set_password(self.password)
 
         super().save(*args, **kwargs)
+        
+from django.utils import timezone
+class VerificationCode(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='verification_codes')
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
     
+    def __str__(self):
+        return f"{self.user.email} - {self.code}"
+
+    # Kodun 10 dəqiqə ərzində keçərli olmasını yoxlamaq üçün
+    def is_valid(self):
+        return (timezone.now() - self.created_at).total_seconds() < 600  # 600 saniyə = 10 dəqiqə
+
 
 class About(models.Model):
     title = models.CharField(max_length=200, null=True, blank=True)     

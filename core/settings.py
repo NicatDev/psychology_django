@@ -36,6 +36,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 INSTALLED_APPS = [
     'jazzmin',
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -89,6 +90,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware", 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -168,7 +170,18 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('az', _('Azerbaijani')),
+)
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 
 from datetime import timedelta
 
@@ -240,3 +253,13 @@ else:
     PAYPAL_CLIENT_ID = PAYPAL_LIVE_CLIENT_ID
     PAYPAL_CLIENT_SECRET = PAYPAL_LIVE_CLIENT_SECRET
     PAYPAL_API_BASE_URL = "https://api-m.paypal.com"
+
+
+
+# Email Ayarları
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.zoho.eu'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # Zoho 587 portu üçün TLS tələb edir
+EMAIL_HOST_USER = 'noreply@octopus.com.az'
+EMAIL_HOST_PASSWORD = 'm9jpU1TkDZjM'

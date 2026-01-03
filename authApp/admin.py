@@ -48,9 +48,26 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = ('last_login', 'date_joined', 'username')
     ordering = ('email',)
 
+from modeltranslation.admin import TabbedTranslationAdmin
+
 admin.site.register(Contact)
-admin.site.register(ContactInfo)
-admin.site.register(About)
-admin.site.register(Plan)
-admin.site.register(Tag)
-admin.site.register(Blog)
+
+@admin.register(ContactInfo)
+class ContactInfoAdmin(TabbedTranslationAdmin):
+    list_display = ('location',)
+
+@admin.register(About)
+class AboutAdmin(TabbedTranslationAdmin):
+    list_display = ('title',)
+
+@admin.register(Plan)
+class PlanAdmin(TabbedTranslationAdmin):
+    list_display = ('title', 'price', 'is_active')
+
+@admin.register(Tag)
+class TagAdmin(TabbedTranslationAdmin):
+    list_display = ('name',)
+
+@admin.register(Blog)
+class BlogAdmin(TabbedTranslationAdmin):
+    list_display = ('title', 'author', 'created_at')

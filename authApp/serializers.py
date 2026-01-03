@@ -141,3 +141,26 @@ class BlogListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'password', 'phone_number']
+
+    def create(self, validated_data):
+        # User yaradılır, amma is_active=False edilir (Email təsdiqlənənə qədər)
+        user = User.objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            phone_number=validated_data.get('phone_number', ''),
+            is_active=False  # Vacib: Kod təsdiqlənənə qədər deaktiv qalır
+        )
+        return user
+
+# Təsdiq (OTP) Serializeri
+class VerifyEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)

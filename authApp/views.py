@@ -104,4 +104,73 @@ class BlogViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BlogListSerializer
     pagination_class = BlogPagination
 
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth import get_user_model
+import random
+User = get_user_model()
+from .serializers import RegisterSerializer, VerifyEmailSerializer
+from .models import VerificationCode
 
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            
+            # 6 rəqəmli kod yaradırıq
+            code = str(random.randint(100000, 999999))
+            
+            # Kodu bazada yadda saxlayırıq (Köhnə kodlar varsa silə bilərsiniz, sadəlik üçün birbaşa yaradırıq)
+            VerificationCode.objects.create(user=user, code=code)
+            
+            # Emaili göndəririk
+            subject = 'Hesab Təsdiqləmə Kodu'
+            message = f'Salam, Sizin təsdiq kodunuz: {code}'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+            
+            try:
+                send_mail(subject, message, email_from, recipient_list)
+            except Exception as e:
+                return Response({'error': 'Email göndərilə bilmədi, amma qeydiyyat uğurludur.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return Response({
+                'message': 'Qeydiyyat uğurla tamamlandı. Zəhmət olmasa emailinizi yoxlayın və kodu daxil edin.',
+                'email': user.email
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerifyEmailView(APIView):
+    def post(self, request):
+        serializer = VerifyEmailSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            code = serializer.validated_data['code']
+            
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response({'error': 'İstifadəçi tapılmadı'}, status=status.HTTP_404_NOT_FOUND)
+            
+            # Əgər artıq aktivdirsə
+            if user.is_active:
+                return Response({'message': 'Hesab artıq təsdiqlənib'}, status=status.HTTP_200_OK)
+
+            # Kodu yoxlayırıq (Sonuncu göndərilən kod əsas götürülür)
+            verification = VerificationCode.objects.filter(user=user, code=code).last()
+            
+            if verification and verification.is_valid():
+                user.is_active = True
+                user.save()
+                
+                # İstifadə olunan kodu silirik (təhlükəsizlik üçün)
+                verification.delete()
+                
+                return Response({'message': 'Hesab uğurla aktivləşdirildi!'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Kod yanlışdır və ya vaxtı bitib'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

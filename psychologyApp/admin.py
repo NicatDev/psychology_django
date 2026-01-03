@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 from .models import *
 
 class OptionInline(admin.TabularInline):
@@ -12,53 +13,53 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class AnswerInline(admin.TabularInline):
     model = Answer
-    extra = 1  # Yeni cavab əlavə etmək üçün
-    # readonly_fields = ('option',)  # bunu silirik, yoxsa option seçmək mümkün deyil
+    extra = 1
+    # readonly_fields = ('option',)
 
 @admin.register(Test)
 class TestAdmin(admin.ModelAdmin):
     list_display = ['user', 'created_at']
-    inlines = [AnswerInline]  # Test içində cavablar görünəcək və seçilə biləcək
+    inlines = [AnswerInline]
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['test', 'option']
     
-class KeyMotivatorInline(admin.TabularInline):
+class KeyMotivatorInline(TranslationTabularInline):
     model = KeyMotivator
     extra = 1
 
-class IdealWorkEnvironmentInline(admin.TabularInline):
+class IdealWorkEnvironmentInline(TranslationTabularInline):
     model = IdealWorkEnvironment
     extra = 1
 
-class CoreValueInline(admin.TabularInline):
+class CoreValueInline(TranslationTabularInline):
     model = CoreValue
     extra = 1
 
-class PreferredWorkTaskInline(admin.TabularInline):
+class PreferredWorkTaskInline(TranslationTabularInline):
     model = PreferredWorkTask
     extra = 1
 
-class ContributionToOrganizationInline(admin.TabularInline):
+class ContributionToOrganizationInline(TranslationTabularInline):
     model = ContributionToOrganization
     extra = 1
 
-class TeamHelpInline(admin.TabularInline):
+class TeamHelpInline(TranslationTabularInline):
     model = TeamHelp
     extra = 1
 
-class TeamIrritateInline(admin.TabularInline):
+class TeamIrritateInline(TranslationTabularInline):
     model = TeamIrritate
     extra = 1
 
-class TeamActionStepInline(admin.TabularInline):
+class TeamActionStepInline(TranslationTabularInline):
     model = TeamActionStep
     extra = 1
 
 # Main admin
 @admin.register(PersonalityType)
-class PersonalityTypeAdmin(admin.ModelAdmin):
+class PersonalityTypeAdmin(TabbedTranslationAdmin):
     list_display = ['code', 'name']
     inlines = [
         KeyMotivatorInline,
