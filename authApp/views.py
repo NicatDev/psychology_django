@@ -176,3 +176,40 @@ class VerifyEmailView(APIView):
                 return Response({'error': 'Kod yanlışdır və ya vaxtı bitib'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ResendCodeView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = VerifyEmailSerializer(data=request.data, partial=True) # Sadəcə email lazımdır
+        if request.data.get('email'):
+            email = request.data.get('email')
+            
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response({'error': 'İstifadəçi tapılmadı'}, status=status.HTTP_404_NOT_FOUND)
+            
+            if user.is_active:
+                return Response({'message': 'Hesab artıq aktivdir.'}, status=status.HTTP_200_OK)
+
+            # Yeni kod yaradırıq
+            code = str(random.randint(100000, 999999))
+            
+            # Köhnə kodu silib yenisini yarada bilərik və ya sadəcə yeni birini yaradarıq
+            # VerificationCode.objects.filter(user=user).delete() 
+            VerificationCode.objects.create(user=user, code=code)
+            
+            # Emaili göndəririk
+            subject = 'Hesab Təsdiqləmə Kodu (Yenidən)'
+            message = f'Salam, Sizin yeni təsdiq kodunuz: {code}'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+            
+            try:
+                send_mail(subject, message, email_from, recipient_list)
+            except Exception as e:
+                return Response({'error': 'Email göndərilə bilmədi'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return Response({'message': 'Yeni kod email ünvanınıza göndərildi.'}, status=status.HTTP_200_OK)
+        
+        return Response({'error': 'Email daxil edilməyib'}, status=status.HTTP_400_BAD_REQUEST)
