@@ -83,8 +83,13 @@ class Contact(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Message"
+        verbose_name_plural = "Messages"
+
     def __str__(self):
         return f"{self.full_name} - {self.subject}"
+    
     
 
 class ContactInfo(models.Model):
