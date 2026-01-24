@@ -1,7 +1,7 @@
 import requests, base64
 from django.conf import settings
 
-BASE_URL = "https://api-m.sandbox.paypal.com"
+BASE_URL = "https://api-m.paypal.com"
 
 
 def get_access_token():
