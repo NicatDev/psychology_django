@@ -221,17 +221,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 from decouple import config
 
-PAYPAL_MODE = config("PAYPAL_MODE", default="live")
+PAYPAL_MODE=config("PAYPAL_MODE", default="live")
 
 
-PAYPAL_LIVE_CLIENT_ID = config("PAYPAL_LIVE_CLIENT_ID", default=None)
-PAYPAL_LIVE_CLIENT_SECRET = config("PAYPAL_LIVE_CLIENT_SECRET", default=None)
+PAYPAL_LIVE_CLIENT_ID=config("PAYPAL_LIVE_CLIENT_ID", default=None)
+PAYPAL_LIVE_CLIENT_SECRET=config("PAYPAL_LIVE_CLIENT_SECRET", default=None)
 
-PAYPAL_WEBHOOK_ID = config("PAYPAL_WEBHOOK_ID", default=None)
+PAYPAL_WEBHOOK_ID=config("PAYPAL_WEBHOOK_ID", default=None)
 
-PAYPAL_CLIENT_PROXY_ENABLED = config("PAYPAL_CLIENT_PROXY_ENABLED", default=False, cast=bool)
+PAYPAL_CLIENT_PROXY_ENABLED=config("PAYPAL_CLIENT_PROXY_ENABLED", default=False, cast=bool)
 
-PAYPAL_RETURN_URL = config(
+PAYPAL_RETURN_URL=config(
     "PAYPAL_RETURN_URL",
     default="http://localhost:2000/paypal/success"
 )
@@ -242,9 +242,9 @@ PAYPAL_CANCEL_URL = config(
     default="http://localhost:2000/paypal/cancel"
 )
 
-PAYPAL_CLIENT_ID = PAYPAL_LIVE_CLIENT_ID
-PAYPAL_CLIENT_SECRET = PAYPAL_LIVE_CLIENT_SECRET
-PAYPAL_API_BASE_URL = "https://api-m.paypal.com"
+PAYPAL_CLIENT_ID=PAYPAL_LIVE_CLIENT_ID
+PAYPAL_CLIENT_SECRET=PAYPAL_LIVE_CLIENT_SECRET
+PAYPAL_API_BASE_URL="https://api-m.paypal.com"
 
 
 
