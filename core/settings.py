@@ -221,10 +221,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 from decouple import config
 
-PAYPAL_MODE = config("PAYPAL_MODE", default="sandbox")
+PAYPAL_MODE = config("PAYPAL_MODE", default="live")
 
-# PAYPAL_SANDBOX_CLIENT_ID = config("PAYPAL_SANDBOX_CLIENT_ID")
-# PAYPAL_SANDBOX_CLIENT_SECRET = config("PAYPAL_SANDBOX_CLIENT_SECRET")
 
 PAYPAL_LIVE_CLIENT_ID = config("PAYPAL_LIVE_CLIENT_ID", default=None)
 PAYPAL_LIVE_CLIENT_SECRET = config("PAYPAL_LIVE_CLIENT_SECRET", default=None)
@@ -244,12 +242,6 @@ PAYPAL_CANCEL_URL = config(
     default="http://localhost:2000/paypal/cancel"
 )
 
-# Active credentials (mode-a görə)
-# if PAYPAL_MODE == "sandbox":
-#     PAYPAL_CLIENT_ID = PAYPAL_SANDBOX_CLIENT_ID
-#     PAYPAL_CLIENT_SECRET = PAYPAL_SANDBOX_CLIENT_SECRET
-#     PAYPAL_API_BASE_URL = "https://api-m.sandbox.paypal.com"
-# else:
 PAYPAL_CLIENT_ID = PAYPAL_LIVE_CLIENT_ID
 PAYPAL_CLIENT_SECRET = PAYPAL_LIVE_CLIENT_SECRET
 PAYPAL_API_BASE_URL = "https://api-m.paypal.com"
