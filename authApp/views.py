@@ -46,6 +46,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class AboutAPIView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
     def get(self, request):
         obj = About.objects.first()
         if not obj:
@@ -62,10 +63,12 @@ class ContactCreateAPIView(generics.CreateAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
     permission_classes = [AllowAny]  
+    authentication_classes = []
 
 
 class ContactInfoAPIView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
     def get(self, request):
         obj = ContactInfo.objects.first()
         if not obj:
@@ -91,7 +94,7 @@ class PlanListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = Plan.objects.filter(is_active=True).order_by('price')
     serializer_class = PlanListSerializer
-    
+    authentication_classes = []
 
 class BlogPagination(PageNumberPagination):
     page_size = 6  # hər səhifədə 10 blog
@@ -100,6 +103,7 @@ class BlogPagination(PageNumberPagination):
 
 class BlogViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
+    authentication_classes = []
     queryset = Blog.objects.all().order_by('-created_at')
     serializer_class = BlogListSerializer
     pagination_class = BlogPagination
@@ -114,6 +118,7 @@ from .models import VerificationCode
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -146,6 +151,7 @@ class RegisterView(APIView):
 
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
     def post(self, request):
         serializer = VerifyEmailSerializer(data=request.data)
         if serializer.is_valid():
@@ -179,6 +185,8 @@ class VerifyEmailView(APIView):
 
 class ResendCodeView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
+    
     def post(self, request):
         serializer = VerifyEmailSerializer(data=request.data, partial=True) # Sadəcə email lazımdır
         if request.data.get('email'):
