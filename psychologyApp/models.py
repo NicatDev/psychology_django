@@ -35,6 +35,7 @@ class Answer(models.Model):
 
 class PersonalityType(models.Model):
     code = models.CharField(max_length=10, unique=True)  # INTJ, INTP
+    file = models.FileField(upload_to='personality_types/', null=True, blank=True) 
     name = models.CharField(max_length=100)
     summary = models.TextField()
     workplace_personality = models.TextField()

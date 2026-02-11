@@ -27,6 +27,7 @@ class TestCreateView(APIView):
         user = request.user
         if user.active_test_count > 0:
             user.active_test_count -= 1
+            user.save() 
         else:
             return Response({'message': 'İstifadəçinin hesabında test cəhdi sayı 0-dır'}, status=status.HTTP_201_CREATED)
         test = serializer.save()
