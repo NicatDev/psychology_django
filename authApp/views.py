@@ -1,4 +1,4 @@
-from .models import Contact, ContactInfo, About, Plan, Blog
+from .models import Contact, ContactInfo, About, Plan, Blog, SocialLink
 from .serializers import UserUpdatePPSerializer,CustomTokenObtainPairSerializer, BlogListSerializer,PlanListSerializer ,ContactSerializer, ContactInfoSerializer, AboutSerializer, UserProfileSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import UserUpdateSerializer, ChangePasswordSerializer
+from .serializers import UserUpdateSerializer, ChangePasswordSerializer, SocialLinkSerializer
 from rest_framework import generics, permissions
 from rest_framework import status
 
@@ -113,7 +113,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 import random
 User = get_user_model()
-from .serializers import RegisterSerializer, VerifyEmailSerializer
+from .serializers import RegisterSerializer, VerifyEmailSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 from .models import VerificationCode
 
 class RegisterView(APIView):
@@ -221,3 +221,62 @@ class ResendCodeView(APIView):
             return Response({'message': 'Yeni kod email ünvanınıza göndərildi.'}, status=status.HTTP_200_OK)
         
         return Response({'error': 'Email daxil edilməyib'}, status=status.HTTP_400_BAD_REQUEST)
+
+class ForgotPasswordView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            user = User.objects.get(email=email)
+
+            # Kod yaradılması
+            code = str(random.randint(100000, 999999))
+            VerificationCode.objects.create(user=user, code=code)
+
+            # Email göndərilməsi
+            subject = 'Octopus - Reset password'
+            message = f'Salam, Sizin şifrə yeniləmə kodunuz: {code}'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+
+            try:
+                send_mail(subject, message, email_from, recipient_list)
+            except Exception as e:
+                return Response({'error': 'Email göndərilə bilmədi.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return Response({'message': 'Təsdiq kodu email ünvanınıza göndərildi.'}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = ResetPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            new_password = serializer.validated_data['new_password']
+            
+            user = User.objects.get(email=email) # Serializer artıq yoxlayıb ki user var
+            
+            user.set_password(new_password)
+            user.save()
+            
+            # Kodu silirik
+            VerificationCode.objects.filter(user=user, code=serializer.validated_data['code']).delete()
+            
+            return Response({'message': 'Şifrəniz uğurla yeniləndi.'}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SocialLinksAPIView(generics.ListAPIView):
+    queryset = SocialLink.objects.all()
+    serializer_class = SocialLinkSerializer
+    permission_classes = [AllowAny]  
+    authentication_classes = []

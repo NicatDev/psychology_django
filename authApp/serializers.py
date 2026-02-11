@@ -167,3 +167,40 @@ class VerifyEmailSerializer(serializers.Serializer):
 
 class ResendCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Bu email ilə istifadəçi tapılmadı.")
+        return value
+
+class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)
+    new_password = serializers.CharField(min_length=6)
+
+    def validate(self, data):
+        email = data.get('email')
+        code = data.get('code')
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"email": "İstifadəçi tapılmadı."})
+
+        # Kodu yoxlayırıq
+        from .models import VerificationCode
+        verification = VerificationCode.objects.filter(user=user, code=code).last()
+        
+        if not verification or not verification.is_valid():
+             raise serializers.ValidationError({"code": "Kod yanlışdır və ya vaxtı bitib."})
+        
+        return data
+
+    
+class SocialLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialLink
+        fields = ['id', 'title', 'image']

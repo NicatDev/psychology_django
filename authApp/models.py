@@ -135,3 +135,11 @@ class Blog(models.Model):
     image = models.ImageField(null=True,blank=True)
     def __str__(self):
         return self.title
+
+
+class SocialLink(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(null=True,blank=True)
+    
+    def __str__(self):
+        return self.title
