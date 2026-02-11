@@ -203,4 +203,4 @@ class ResetPasswordSerializer(serializers.Serializer):
 class SocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialLink
-        fields = ['id', 'title', 'image']
+        fields = ['id', 'title', 'image','url']
