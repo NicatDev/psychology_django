@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, About, Contact, ContactInfo, Plan, Tag, Blog
+from .models import CustomUser, About, Contact, ContactInfo, Plan, Tag, Blog, SocialLink
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -62,7 +62,7 @@ class AboutAdmin(TabbedTranslationAdmin):
 
 @admin.register(Plan)
 class PlanAdmin(TabbedTranslationAdmin):
-    list_display = ('title', 'price', 'is_active')
+    list_display = ( 'price', 'is_active', 'title')
 
 @admin.register(Tag)
 class TagAdmin(TabbedTranslationAdmin):
@@ -71,3 +71,5 @@ class TagAdmin(TabbedTranslationAdmin):
 @admin.register(Blog)
 class BlogAdmin(TabbedTranslationAdmin):
     list_display = ('title', 'author', 'created_at')
+
+admin.site.register(SocialLink)
