@@ -47,39 +47,64 @@ class PersonalityType(models.Model):
     growth_and_development = models.TextField()
     coping_with_stress = models.TextField()
     achieving_success = models.TextField()
+    making_decisions = models.TextField(null=True, blank=True) # New text field
+
+    # JSON Fields for lists
+    key_motivators = models.JSONField(default=list, blank=True)
+    ideal_work_environments = models.JSONField(default=list, blank=True)
+    core_values = models.JSONField(default=list, blank=True)
+    preferred_work_tasks = models.JSONField(default=list, blank=True)
+    contributions_to_organization = models.JSONField(default=list, blank=True)
+    
+    # Team
+    team_helps = models.JSONField(default=list, blank=True)
+    team_irritates = models.JSONField(default=list, blank=True)
+    team_action_steps = models.JSONField(default=list, blank=True)
+    
+    # Communication
+    communication_strengths = models.JSONField(default=list, blank=True)
+    communication_misunderstanding = models.JSONField(default=list, blank=True)
+    communication_action_steps = models.JSONField(default=list, blank=True)
+    
+    # Conflict
+    conflict_help = models.JSONField(default=list, blank=True)
+    conflict_triggered_by = models.JSONField(default=list, blank=True)
+    conflict_irritate = models.JSONField(default=list, blank=True)
+    conflict_action_steps = models.JSONField(default=list, blank=True)
+    
+    # Leadership
+    inspire_others = models.JSONField(default=list, blank=True)
+    make_things_happen = models.JSONField(default=list, blank=True)
+    leadership_development = models.JSONField(default=list, blank=True)
+    
+    # Decisions
+    decision_strengths = models.JSONField(default=list, blank=True)
+    decision_challenges = models.JSONField(default=list, blank=True)
+    decision_action_steps = models.JSONField(default=list, blank=True)
+    
+    # Tasks
+    tasks_help = models.JSONField(default=list, blank=True)
+    tasks_irritate = models.JSONField(default=list, blank=True)
+    tasks_action_steps = models.JSONField(default=list, blank=True)
+    
+    # Learning/Growth
+    learning_improved = models.JSONField(default=list, blank=True)
+    learning_hindered = models.JSONField(default=list, blank=True)
+    how_you_view_change = models.JSONField(default=list, blank=True)
+    opportunities_for_growth = models.JSONField(default=list, blank=True)
+    
+    # Stress
+    stress_triggers = models.JSONField(default=list, blank=True)
+    best_stress_response = models.JSONField(default=list, blank=True)
+    others_help_stress = models.JSONField(default=list, blank=True)
+    worst_stress_response = models.JSONField(default=list, blank=True)
+    others_worsen_stress = models.JSONField(default=list, blank=True)
+    
+    # Success
+    potential_problems = models.JSONField(default=list, blank=True)
+    suggestions_do = models.JSONField(default=list, blank=True)
+    suggestions_dont = models.JSONField(default=list, blank=True)
 
     def __str__(self):
         return self.code
-
-class KeyMotivator(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="key_motivators")
-    name = models.CharField(max_length=255)
-
-class IdealWorkEnvironment(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="ideal_work_environments")
-    name = models.CharField(max_length=255)
-
-class CoreValue(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="core_values")
-    name = models.CharField(max_length=255)
-
-class PreferredWorkTask(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="preferred_work_tasks")
-    name = models.CharField(max_length=255)
-
-class ContributionToOrganization(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="contributions_to_organization")
-    name = models.CharField(max_length=255)
-
-class TeamHelp(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="team_helps")
-    name = models.CharField(max_length=255)
-
-class TeamIrritate(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="team_irritates")
-    name = models.CharField(max_length=255)
-
-class TeamActionStep(models.Model):
-    personality_type = models.ForeignKey(PersonalityType, on_delete=models.CASCADE, related_name="team_action_steps")
-    name = models.CharField(max_length=255)
 

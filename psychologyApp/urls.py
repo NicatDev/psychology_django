@@ -12,5 +12,5 @@ urlpatterns = [
 
 
     path('load-questions/', LoadQuestionsAPIView.as_view(), name='load-questions'),
-    path('load-personalityTypes/', LoadPersonalityTypesAPIView.as_view(), name='load-questions'),
+    path('load-personalityTypes/', LoadPersonalityTypesAPIView.as_view(), name='load-personality-types'),
 ]

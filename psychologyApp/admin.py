@@ -1,6 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
-from .models import *
+from .models import PersonalityType, Question, Option, Test, Answer
 
 class OptionInline(admin.TabularInline):
     model = Option
@@ -25,49 +25,7 @@ class TestAdmin(admin.ModelAdmin):
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['test', 'option']
     
-class KeyMotivatorInline(TranslationTabularInline):
-    model = KeyMotivator
-    extra = 1
-
-class IdealWorkEnvironmentInline(TranslationTabularInline):
-    model = IdealWorkEnvironment
-    extra = 1
-
-class CoreValueInline(TranslationTabularInline):
-    model = CoreValue
-    extra = 1
-
-class PreferredWorkTaskInline(TranslationTabularInline):
-    model = PreferredWorkTask
-    extra = 1
-
-class ContributionToOrganizationInline(TranslationTabularInline):
-    model = ContributionToOrganization
-    extra = 1
-
-class TeamHelpInline(TranslationTabularInline):
-    model = TeamHelp
-    extra = 1
-
-class TeamIrritateInline(TranslationTabularInline):
-    model = TeamIrritate
-    extra = 1
-
-class TeamActionStepInline(TranslationTabularInline):
-    model = TeamActionStep
-    extra = 1
-
 # Main admin
 @admin.register(PersonalityType)
 class PersonalityTypeAdmin(TabbedTranslationAdmin):
     list_display = ['code', 'name']
-    inlines = [
-        KeyMotivatorInline,
-        IdealWorkEnvironmentInline,
-        CoreValueInline,
-        PreferredWorkTaskInline,
-        ContributionToOrganizationInline,
-        TeamHelpInline,
-        TeamIrritateInline,
-        TeamActionStepInline,
-    ]

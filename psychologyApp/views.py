@@ -120,31 +120,35 @@ class LoadQuestionsAPIView(APIView):
     
 
 
-from .models import (
-    PersonalityType, KeyMotivator, IdealWorkEnvironment, CoreValue, PreferredWorkTask,
-    ContributionToOrganization, TeamHelp, TeamIrritate, TeamActionStep
-)
+from .models import PersonalityType
+from django.db import transaction
 class LoadPersonalityTypesAPIView(APIView):
     """
-    API çağırıldıqda mövcud personality types datalarını sil və
-    personalityTypes.json-dan DB-yə doldur.
+    API çağırıldıqda mövcud personality types datalarını silir və
+    personalityTypes.json faylından DB-yə yenidən doldurur.
+    Modeltranslation field-ləri bütün dillər üzrə yazılır.
     """
 
     def post(self, request):
-        # 1️⃣ Mövcud datanı sil
-        PersonalityType.objects.all().delete()
+        # Bütün dilləri götür
+        LANGS = [lang[0] for lang in settings.LANGUAGES]
 
-        # 2️⃣ JSON faylını oxu
+        # JSON path
         file_path = os.path.join(settings.BASE_DIR, "data", "personalityTypes.json")
+
         with open(file_path, "r", encoding="utf-8") as f:
             types_data = json.load(f)
 
-        # 3️⃣ DB-yə yaz
-        for code, details in types_data.items():
-            # PersonalityType yaradılır
-            pt, created = PersonalityType.objects.update_or_create(
-                code=code,
-                defaults={
+        with transaction.atomic():
+            # 1️⃣ Köhnə datanı sil
+            PersonalityType.objects.all().delete()
+
+            # Helper → translatable field doldurur
+            def build_i18n_defaults(details):
+                defaults = {}
+
+                # Text Fields Mapping
+                text_fields_map = {
                     "name": details.get("name", ""),
                     "summary": details.get("summary", ""),
                     "workplace_personality": details.get("workplacePersonality", ""),
@@ -155,22 +159,74 @@ class LoadPersonalityTypesAPIView(APIView):
                     "getting_things_done": details.get("gettingThingsDone", ""),
                     "growth_and_development": details.get("growthAndDevelopment", ""),
                     "coping_with_stress": details.get("copingWithStress", ""),
-                    "achieving_success": details.get("achievingSuccess", "")
+                    "achieving_success": details.get("achievingSuccess", ""),
+                    "making_decisions": details.get("makingDecisions", ""),
                 }
-            )
+                
+                # List Fields Mapping (JSONFields)
+                list_fields_map = {
+                    "key_motivators": details.get("keyMotivators", []),
+                    "ideal_work_environments": details.get("idealWorkEnvironment", []),
+                    "core_values": details.get("coreValues", []),
+                    "preferred_work_tasks": details.get("preferredWorkTasks", []),
+                    "contributions_to_organization": details.get("contributionsToOrganization", []),
+                    "team_helps": details.get("teamHelp", []),
+                    "team_irritates": details.get("teamIrritate", []),
+                    "team_action_steps": details.get("teamActionSteps", []),
+                    "communication_strengths": details.get("communicationStrengths", []),
+                    "communication_misunderstanding": details.get("communicationMisunderstanding", []),
+                    "communication_action_steps": details.get("communicationActionSteps", []),
+                    "conflict_help": details.get("conflictHelp", []),
+                    "conflict_triggered_by": details.get("conflictTriggeredBy", []),
+                    "conflict_irritate": details.get("conflictIrritate", []),
+                    "conflict_action_steps": details.get("conflictActionSteps", []),
+                    "inspire_others": details.get("inspireOthers", []),
+                    "make_things_happen": details.get("makeThingsHappen", []),
+                    "leadership_development": details.get("leadershipDevelopment", []),
+                    "decision_strengths": details.get("decisionStrengths", []),
+                    "decision_challenges": details.get("decisionChallenges", []),
+                    "decision_action_steps": details.get("decisionActionSteps", []),
+                    "tasks_help": details.get("tasksHelp", []),
+                    "tasks_irritate": details.get("tasksIrritate", []),
+                    "tasks_action_steps": details.get("tasksActionSteps", []),
+                    "learning_improved": details.get("learningImproved", []),
+                    "learning_hindered": details.get("learningHindered", []),
+                    "how_you_view_change": details.get("howYouViewChange", []),
+                    "opportunities_for_growth": details.get("opportunitiesForGrowth", []),
+                    "stress_triggers": details.get("stressTriggers", []),
+                    "best_stress_response": details.get("bestStressResponse", []),
+                    "others_help_stress": details.get("othersHelpStress", []),
+                    "worst_stress_response": details.get("worstStressResponse", []),
+                    "others_worsen_stress": details.get("othersWorsenStress", []),
+                    "potential_problems": details.get("potentialProblems", []),
+                    "suggestions_do": details.get("suggestionsDo", []),
+                    "suggestions_dont": details.get("suggestionsDont", []),
+                }
 
-            # 4️⃣ List tipli field-ləri əlavə et
-            def add_list_items(model_class, related_name, key):
-                for item in details.get(key, []):
-                    model_class.objects.create(personality_type=pt, name=item)
+                # Combine maps
+                fields_map = {**text_fields_map, **list_fields_map}
 
-            add_list_items(KeyMotivator, "key_motivators", "keyMotivators")
-            add_list_items(IdealWorkEnvironment, "ideal_work_environments", "idealWorkEnvironment")
-            add_list_items(CoreValue, "core_values", "coreValues")
-            add_list_items(PreferredWorkTask, "preferred_work_tasks", "preferredWorkTasks")
-            add_list_items(ContributionToOrganization, "contributions_to_organization", "contributionsToOrganization")
-            add_list_items(TeamHelp, "team_helps", "teamHelp")
-            add_list_items(TeamIrritate, "team_irritates", "teamIrritate")
-            add_list_items(TeamActionStep, "team_action_steps", "teamActionSteps")
+                for field, value in fields_map.items():
+                    # Əgər modeldə translation varsa yaz
+                    for lang in LANGS:
+                        field_name = f"{field}_{lang}"
+                        if hasattr(PersonalityType, field_name):
+                            defaults[field_name] = value
 
-        return Response({"message": "Personality types loaded successfully"}, status=status.HTTP_201_CREATED)
+                    # Default field də doldurulsun (optional but good for fallback)
+                    if hasattr(PersonalityType, field):
+                        defaults[field] = value
+
+                return defaults
+
+            # 2️⃣ DB-yə yaz
+            for code, details in types_data.items():
+                PersonalityType.objects.update_or_create(
+                    code=code,
+                    defaults=build_i18n_defaults(details),
+                )
+
+        return Response(
+            {"message": "Personality types loaded successfully"},
+            status=status.HTTP_201_CREATED,
+        )
